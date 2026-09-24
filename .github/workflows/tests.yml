@@ -26,21 +26,38 @@ jobs:
 
       - name: 运行测试（86 项断言）
         working-directory: skills/money-finance-advice/scripts
+        env:
+          PYTHONIOENCODING: utf-8
+          PYTHONUTF8: "1"
         run: python test_irr_calc.py
 
       - name: CLI 冒烟测试
         working-directory: skills/money-finance-advice/scripts
         shell: bash
+        env:
+          PYTHONIOENCODING: utf-8
+          PYTHONUTF8: "1"
         run: |
-          python irr_calc.py installment --principal 12000 --months 12 --monthly-fee-rate 0.006
-          python irr_calc.py insurance --premiums 100000,100000,100000,100000,100000 --cash-value 650000 --year 10
-          python irr_calc.py loan --principal 1000000 --months 360 --annual-rate 0.0385
-          python irr_calc.py irr --cashflow=-12000,1072,1072,1072,1072,1072,1072,1072,1072,1072,1072,1072,1072
-          python irr_calc.py benford --numbers 1234,2345,3456,4567,5678,6789,7891,8912
+          set -e
+          # 说明：Windows runner 默认 locale 为 cp1252，脚本输出含中文会 UnicodeEncodeError。
+          # 上述 PYTHONIOENCODING/PYTHONUTF8 已在 job 级统一设置为 utf-8 解决。
+          python irr_calc.py installment --principal 12000 --months 12 --monthly-fee-rate 0.006 > /dev/null
+          python irr_calc.py insurance --premiums 100000,100000,100000,100000,100000 --cash-value 650000 --year 10 > /dev/null
+          python irr_calc.py loan --principal 1000000 --months 360 --annual-rate 0.0385 > /dev/null
+          python irr_calc.py irr --cashflow=-12000,1072,1072,1072,1072,1072,1072,1072,1072,1072,1072,1072,1072 > /dev/null
+          python irr_calc.py benford --numbers 1234,2345,3456,4567,5678,6789,7891,8912 > /dev/null
+          echo "CLI 冒烟测试通过（5 个子命令）"
 
       - name: 校验 SKILL.md frontmatter
         shell: bash
         run: |
-          head -5 skills/money-finance-advice/SKILL.md | grep -q "^name: money-finance-advice" \
-            && echo "frontmatter name OK" \
-            || (echo "frontmatter name 缺失或不匹配" && exit 1)
+          set -e
+          first_line=$(head -1 skills/money-finance-advice/SKILL.md)
+          if [ "$first_line" != "---" ]; then
+            echo "frontmatter 起始标记缺失"; exit 1
+          fi
+          if head -5 skills/money-finance-advice/SKILL.md | grep -q "^name: money-finance-advice"; then
+            echo "frontmatter name OK"
+          else
+            echo "frontmatter name 缺失或不匹配"; exit 1
+          fi

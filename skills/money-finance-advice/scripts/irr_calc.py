@@ -446,6 +446,18 @@ def main():
     print(json.dumps(_round_floats(result), ensure_ascii=False, indent=2))
 
 
+def _ensure_utf8_stdout():
+    """Windows 控制台默认可能是 cp1252 / cp936，输出中文会 UnicodeEncodeError。
+    这里把 stdout/stderr 重新配置为 UTF-8（Python 3.7+ 支持 reconfigure）。
+    这样脚本在任何 locale 下都能正常打印带中文的 JSON。"""
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError, OSError):
+            # 极老的 Python 或非文本流，忽略即可
+            pass
+
+
 def _dispatch(args):
     if args.cmd == "installment":
         return installment_cost(args.principal, args.months, args.monthly_fee_rate)
@@ -496,4 +508,5 @@ def _round_floats(obj, nd=6):
 
 
 if __name__ == "__main__":
+    _ensure_utf8_stdout()
     main()
