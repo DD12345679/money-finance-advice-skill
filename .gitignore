@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.venv/
+venv/
+env/
+
+# 测试与调试临时产物
+_test_result.txt
+_verify.txt
+_testresult.txt
+_cli_result.txt
+_final.txt
+_env*.txt
+_cv_out.txt
+_cv_out.json
+_probe*.py
+_probe*.txt
+_run_*.py
+_check_*.py
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 环境变量与凭证
+.env
+.env.local
+*.key
+*.pem

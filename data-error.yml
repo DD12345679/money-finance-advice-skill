@@ -1,0 +1,68 @@
+name: 🐛 报告错误数字
+description: 发现某处政策数字过期、算错了，或引用来源不可靠
+title: "[数字错误] "
+labels: ["data-accuracy"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢帮忙纠错 —— 这个项目直接面向普通人的钱决策，数字错了后果很严重。
+
+        ⚠️ **没有官方出处的报告无法处理。**
+
+  - type: input
+    id: location
+    attributes:
+      label: 📍 位置
+      description: 文件路径 + 行号
+      placeholder: "references/cost-calculation.md:75"
+    validations:
+      required: true
+
+  - type: textarea
+    id: current
+    attributes:
+      label: 📌 当前内容
+      description: 贴出现在写的原文
+    validations:
+      required: true
+
+  - type: textarea
+    id: correct
+    attributes:
+      label: ✅ 正确数值
+      description: 应该是什么
+    validations:
+      required: true
+
+  - type: input
+    id: source
+    attributes:
+      label: 🔗 官方出处链接
+      description: 必须是 A 级或 B 级信源（部委官网 / 地方官方口径）
+      placeholder: "https://www.chinatax.gov.cn/..."
+    validations:
+      required: true
+
+  - type: input
+    id: docno
+    attributes:
+      label: 📄 文号（如有）
+      placeholder: "财政部 税务总局公告2026年第10号"
+    validations:
+      required: false
+
+  - type: input
+    id: queried
+    attributes:
+      label: 📅 查询日期
+      placeholder: "2026-09-24"
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: 📝 补充说明
+    validations:
+      required: false
