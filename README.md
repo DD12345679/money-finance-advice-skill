@@ -47,21 +47,46 @@
 
 ## 安装
 
-### WorkBuddy / Claude Code
+### 方式一：克隆整仓（推荐）
 
 ```bash
-# 克隆到 skills 目录
-git clone https://github.com/<DD12345679>/money-finance-advice-skill.git
+git clone https://github.com/DD12345679/money-finance-advice-skill.git
+```
 
-# 复制 skill 本体
-# Windows
+然后把 **skill 本体** 复制到 skills 目录（注意是 `skills/money-finance-advice/` 这一层，不是仓库根）：
+
+**Windows（PowerShell / CMD）**
+
+```powershell
+# PowerShell
+Copy-Item -Recurse -Force "money-finance-advice-skill\skills\money-finance-advice" "$env:USERPROFILE\.workbuddy\skills\"
+
+# CMD
 xcopy /E /I money-finance-advice-skill\skills\money-finance-advice "%USERPROFILE%\.workbuddy\skills\money-finance-advice"
+```
 
-# macOS / Linux
+**macOS / Linux**
+
+```bash
+mkdir -p ~/.workbuddy/skills
 cp -r money-finance-advice-skill/skills/money-finance-advice ~/.workbuddy/skills/
 ```
 
-装好后重启会话，问一句"这个分期划不划算"就自动触发。
+### 方式二：只手动取 skill 本体
+
+不想 clone 整个仓库的话，直接下载 `skills/money-finance-advice/` 这一个目录放进
+`~/.workbuddy/skills/` 即可（`README.md`、`.github/` 等只是仓库门面，装的时候不需要）。
+
+### 验证安装
+
+```bash
+ls ~/.workbuddy/skills/money-finance-advice/SKILL.md      # macOS / Linux
+dir %USERPROFILE%\.workbuddy\skills\money-finance-advice\SKILL.md   # Windows
+```
+
+能列出文件就装好了。**重启会话**，问一句「这个分期划不划算」就会自动触发。
+
+> 💡 Claude Code 用户同理：把 `money-finance-advice/` 放进 `~/.claude/skills/`。
 
 ---
 
@@ -71,7 +96,13 @@ cp -r money-finance-advice-skill/skills/money-finance-advice ~/.workbuddy/skills
 money-finance-advice-skill/
 ├── README.md                          # 你正在看的这个
 ├── LICENSE                            # MIT
+├── CONTRIBUTING.md                    # 贡献指南
+├── CHANGELOG.md                       # 变更日志
 ├── .gitignore
+├── .gitattributes                     # 统一换行符
+├── .github/
+│   ├── workflows/tests.yml            # CI：3 OS × 2 Python 版本
+│   └── ISSUE_TEMPLATE/                # 数据纠错 / 新增条目 模板
 └── skills/
     └── money-finance-advice/          # ← skill 本体（装这个目录）
         ├── SKILL.md                   # 主入口：铁律 / 定位表 / 五条路径
